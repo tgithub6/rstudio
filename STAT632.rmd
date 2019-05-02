@@ -1,0 +1,430 @@
+---
+title: "Untitled"
+author: "a"
+date: "April 23, 2019"
+output:
+  html_document: default
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library("plotly")
+library("tidyverse")
+library("data.table")
+library("gridExtra")
+library("knitr")
+library(readr)
+library(randomForest)
+library(MASS)
+```
+
+
+```{r}
+
+olympics<-read_csv("C:/Users/A/Desktop/632Regression/Project/DatasetPractice/olympics_1980_subset.csv",
+                 col_types = cols(
+                   Sex = col_factor(levels = c("M","F")),
+                   Age =  col_integer(),
+                   Height = col_double(),
+                   Weight = col_double(),
+                   NOC = col_character(),
+                   Year = col_integer(),
+                   Season = col_factor(levels = c("Summer","Winter")),
+                   City = col_character(),
+                   Sport = col_character()
+                 )
+)
+
+```
+
+```{r}
+olympics2 <- na.omit(olympics)
+olympics3 <- olympics2[which(olympics2$Year >= 1980), ]
+```
+
+```{r}
+library(randomForest)
+class(olympics3)
+olympics3<-as.data.frame(olympics3)
+```
+
+
+```{r}
+# make a dummy variable for Swimming
+n = nrow(olympics3)
+swim <- rep(0, n)
+ind <- which(olympics3$Sport == "Swimming")
+swim[ind] <- 1
+olympics3$swim01 = swim
+```
+
+```{r}
+n = nrow(olympics3)
+equestrianism <- rep(0, n)
+ind <- which(olympics3$Sport == "Equestrianism")
+equestrianism[ind] <- 1
+olympics3$equestrianism01 = equestrianism
+```
+
+
+```{r}
+n = nrow(olympics3)
+archery <- rep(0, n)
+ind <- which(olympics3$Sport == "Archery")
+archery [ind] <- 1
+olympics3$archery01 = archery
+```
+
+
+```{r}
+n = nrow(olympics3)
+athletics <- rep(0, n)
+ind <- which(olympics3$Sport == "Athletics")
+athletics [ind] <- 1
+olympics3$athletics01 = athletics
+```
+
+
+```{r}
+n = nrow(olympics3)
+badminton <- rep(0, n)
+ind <- which(olympics3$Sport == "Badminton")
+badminton [ind] <- 1
+olympics3$badminton01 = badminton
+```
+
+
+```{r}
+n = nrow(olympics3)
+basketball <- rep(0, n)
+ind <- which(olympics3$Sport == "Basketball")
+basketball  [ind] <- 1
+olympics3$basketball01 = basketball 
+```
+
+
+```{r}
+n = nrow(olympics3)
+beachvolleyball <- rep(0, n)
+ind <- which(olympics3$Sport == "Beach Volleyball")
+beachvolleyball[ind] <- 1
+olympics3$beachvolleyball01 = beachvolleyball
+```
+
+```{r}
+n = nrow(olympics3)
+boxing <- rep(0, n)
+ind <- which(olympics3$Sport == "Boxing")
+boxing [ind] <- 1
+olympics3$boxing01 = boxing
+```
+
+```{r}
+n = nrow(olympics3)
+canoeing <- rep(0, n)
+ind <- which(olympics3$Sport == "Canoeing")
+canoeing [ind] <- 1
+olympics3$canoeing01 = canoeing
+```
+
+```{r}
+n = nrow(olympics3)
+cycling <- rep(0, n)
+ind <- which(olympics3$Sport == "Cycling")
+cycling [ind] <- 1
+olympics3$cycling01 = cycling
+```
+
+```{r}
+n = nrow(olympics3)
+diving <- rep(0, n)
+ind <- which(olympics3$Sport == "Diving")
+diving [ind] <- 1
+olympics3$diving01 = diving
+```
+
+```{r}
+n = nrow(olympics3)
+fencing <- rep(0, n)
+ind <- which(olympics3$Sport == "Fencing")
+fencing [ind] <- 1
+olympics3$fencing01 = fencing
+```
+
+
+```{r}
+n = nrow(olympics3)
+football <- rep(0, n)
+ind <- which(olympics3$Sport == "Football")
+football [ind] <- 1
+olympics3$football01 = football
+```
+
+```{r}
+n = nrow(olympics3)
+golf <- rep(0, n)
+ind <- which(olympics3$Sport == "Golf")
+golf [ind] <- 1
+olympics3$golf01 = golf
+```
+
+```{r}
+n = nrow(olympics3)
+gymnastics <- rep(0, n)
+ind <- which(olympics3$Sport == "Gymnastics")
+gymnastics [ind] <- 1
+olympics3$gymnastics01 = gymnastics
+```
+
+```{r}
+n = nrow(olympics3)
+handball <- rep(0, n)
+ind <- which(olympics3$Sport == "Handball")
+handball [ind] <- 1
+olympics3$handball01 = handball
+```
+
+```{r}
+n = nrow(olympics3)
+hockey <- rep(0, n)
+ind <- which(olympics3$Sport == "Hockey")
+hockey [ind] <- 1
+olympics3$hockey01 = hockey
+```
+
+```{r}
+n = nrow(olympics3)
+judo <- rep(0, n)
+ind <- which(olympics3$Sport == "Judo")
+judo [ind] <- 1
+olympics3$judo01 = judo
+```
+
+```{r}
+n = nrow(olympics3)
+modernpentathlon <- rep(0, n)
+ind <- which(olympics3$Sport == "Modern Pentathlon")
+modernpentathlon [ind] <- 1
+olympics3$modernpentathlon01 = modernpentathlon
+```
+
+```{r}
+n = nrow(olympics3)
+rhythmicgymnastics <- rep(0, n)
+ind <- which(olympics3$Sport == "Rhythmic Gymnastics")
+rhythmicgymnastics [ind] <- 1
+olympics3$rhythmicgymnastics01 = rhythmicgymnastics
+```
+
+
+```{r}
+n = nrow(olympics3)
+rowing <- rep(0,n)
+ind <- which(olympics3$Sport == "Rowing")
+rowing [ind] <- 1
+olympics3$rowing01 = rowing
+```
+
+```{r}
+n = nrow(olympics3)
+rugbysevens <- rep(0, n)
+ind <- which(olympics3$Sport == "Rugby Sevens")
+rugbysevens [ind] <- 1
+olympics3$rugbysevens01 = rugbysevens
+```
+
+```{r}
+n = nrow(olympics3)
+sailing <- rep(0, n)
+ind <- which(olympics3$Sport == "Sailing")
+sailing [ind] <- 1
+olympics3$sailing01 = sailing
+```
+
+```{r}
+n = nrow(olympics3)
+shooting <- rep(0, n)
+ind <- which(olympics3$Sport == "Shooting")
+shooting [ind] <- 1
+olympics3$shooting01 = shooting
+```
+
+```{r}
+n = nrow(olympics3)
+softball <- rep(0, n)
+ind <- which(olympics3$Sport == "Softball")
+softball [ind] <- 1
+olympics3$softball01 = softball
+```
+
+```{r}
+n = nrow(olympics3)
+synchronizedswimming <- rep(0, n)
+ind <- which(olympics3$Sport == "Synchronized Swimming")
+synchronizedswimming [ind] <- 1
+olympics3$synchronizedswimming01 = synchronizedswimming
+```
+
+```{r}
+n = nrow(olympics3)
+tabletennis <- rep(0, n)
+ind <- which(olympics3$Sport == "Table Tennis")
+tabletennis [ind] <- 1
+olympics3$tabletennis01 = tabletennis
+```
+
+
+```{r}
+n = nrow(olympics3)
+taekwondo <- rep(0, n)
+ind <- which(olympics3$Sport == "Taekwondo")
+taekwondo [ind] <- 1
+olympics3$taekwondo01 = taekwondo
+```
+
+```{r}
+n = nrow(olympics3)
+tennis <- rep(0, n)
+ind <- which(olympics3$Sport == "Tennis")
+tennis [ind] <- 1
+olympics3$tennis01 = tennis
+```
+
+```{r}
+n = nrow(olympics3)
+triathlon <- rep(0, n)
+ind <- which(olympics3$Sport == "Triathlon")
+triathlon [ind] <- 1
+olympics3$triathlon01 = triathlon
+```
+
+```{r}
+n = nrow(olympics3)
+volleyball <- rep(0, n)
+ind <- which(olympics3$Sport == "Volleyball")
+volleyball [ind] <- 1
+olympics3$volleyball01 = volleyball
+```
+
+```{r}
+n = nrow(olympics3)
+waterpolo <- rep(0, n)
+ind <- which(olympics3$Sport == "Water Polo")
+waterpolo [ind] <- 1
+olympics3$waterpolo01 = waterpolo
+```
+
+```{r}
+n = nrow(olympics3)
+weightlifting <- rep(0, n)
+ind <- which(olympics3$Sport == "Weightlifting")
+weightlifting [ind] <- 1
+olympics3$weightlifting01 = weightlifting
+```
+
+```{r}
+n = nrow(olympics3)
+wrestling <- rep(0, n)
+ind <- which(olympics3$Sport == "Wrestling")
+wrestling [ind] <- 1
+olympics3$wrestling01 = wrestling
+```
+
+```{r}
+n = nrow(olympics3)
+male <- rep(0, n)
+ind <- which(olympics3$Sex == "M")
+male [ind] <- 1
+olympics3$male01 = male
+```
+
+```{r}
+n = nrow(olympics3)
+female <- rep(0, n)
+ind <- which(olympics3$Sex == "F")
+female [ind] <- 1
+olympics3$female01 = female
+```
+
+
+```{r, eval=F, echo=T}
+# eval = F (don't evaluate the code in this chunk again because the individual previous code chunks have been executed) and echo = T (display code of this chunk in the output document)
+dim(olympics3)
+set.seed(10)
+rf1 <- randomForest(Age ~ male01 + female01 +Height + Weight + Year  +archery01+athletics01+badminton01+basketball01+beachvolleyball01+boxing01+canoeing01+cycling01+diving01+equestrianism01+fencing01+football01+golf01+ gymnastics01+ handball01+hockey01+judo01+modernpentathlon01+rowing01+rhythmicgymnastics01+rugbysevens01+sailing01+shooting01+softball01+swim01+synchronizedswimming01+tabletennis01+taekwondo01+tennis01+triathlon01+volleyball01+waterpolo01+weightlifting01+wrestling01,data = olympics3, ntree=100, importance=TRUE)
+rf1
+#saveRDS(rf1, file="C:/Users/A/Desktop/632Regression/Project/Code/rf1.rds")
+```
+
+```{r}
+importance(rf1)
+```
+
+```{r}
+plot(predict(rf1), olympics3$Age, xlab="OOB Predictions (Age)", ylab="Observed Values (Age)",xlim=c(5,50),ylim=c(5,50))
+abline(0,1, col="red", lwd=2)
+```
+
+Top 5 Most Predictive Features for Age
+```{r}
+set.seed(10)
+rf2 <- randomForest(Age ~ Year  + equestrianism01 + shooting01 + swim01 + sailing01,data = olympics3, ntree=100,importance=TRUE)
+rf2
+```
+
+```{r}
+varImpPlot(rf2, type=1)
+```
+
+```{r}
+plot(predict(rf2), olympics3$Age, xlab="OOB Predictions (Age)", ylab="Observed Values (Age)",xlim=c(5,50),ylim=c(5,50))
+abline(0,1, col="red", lwd=2)
+```
+
+
+```{r}
+# Determine Positive and Negative Correlations with Age (among 20 predictors)
+lm1<-lm(Age~ Height + Weight + Year  +archery01+athletics01+beachvolleyball01+boxing01+cycling01+diving01+equestrianism01+fencing01+football01+ gymnastics01+rowing01+sailing01+shooting01+swim01+synchronizedswimming01+tabletennis01+tennis01,data = olympics3)
+summary(lm1)
+```
+
+
+# Strongest Positive Correlations with Age
+```{r, eval=F, echo=T}
+set.seed(10)
+rf3 <- randomForest(Age~Weight + Year  +archery01+athletics01+beachvolleyball01+cycling01+equestrianism01+fencing01+rowing01+sailing01+shooting01+tabletennis01, data = olympics3, ntree=100, importance=TRUE)
+rf3
+#saveRDS(rf3, file="C:/Users/A/Desktop/632Regression/Project/Code/rf3.rds")
+```
+
+
+```{r}
+varImpPlot(rf3, type=1)
+```
+
+```{r}
+plot(predict(rf3), olympics3$Age, xlab="OOB Predictions (Age)", ylab="Observed Values (Age)",xlim=c(5,50),ylim=c(5,50))
+abline(0,1, col="red", lwd=2)
+```
+
+# Strongest Negative Correlations with Age
+```{r, eval=F, echo=T}
+set.seed(10)
+rf4 <- randomForest(Age ~  Height + boxing01+diving01+football01+ gymnastics01+swim01+synchronizedswimming01+tennis01,data = olympics3,ntree=100, importance=TRUE)
+rf4
+#saveRDS(rf4, file="C:/Users/A/Desktop/632Regression/Project/Code/rf4.rds")
+```
+
+```{r}
+varImpPlot(rf4, type=1)
+```
+
+```{r}
+plot(predict(rf4), olympics3$Age, xlab="OOB Predictions (Age)", ylab="Observed Values (Age)",xlim=c(5,50),ylim=c(5,50))
+abline(0,1, col="red", lwd=2)
+```
+
